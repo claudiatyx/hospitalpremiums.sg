@@ -55,7 +55,7 @@ tr:hover td{background:#f1efe8}
 
 <div class="tabs">
   <button class="tab active" onclick="showTab('compare')">Premium comparison</button>
-  <button class="tab" onclick="showTab('cashout')">Cash outlay analysis</button>
+
   <button class="tab" onclick="showTab('retire')">Post-65 affordability</button>
   <button class="tab" onclick="showTab('data')">Full data table</button>
 </div>
@@ -95,24 +95,7 @@ tr:hover td{background:#f1efe8}
   <div class="info-box" id="compare-note"></div>
 </div>
 
-<!-- PANEL 2: CASH OUTLAY -->
-<div class="panel" id="panel-cashout">
-  <div class="controls">
-    <div class="ctl-group">
-      <span class="ctl-label">Ward tier</span>
-      <select id="coTierSel" onchange="updateCashout()">
-        <option value="private">Private ward</option>
-        <option value="a">Ward A</option>
-        <option value="b1">Ward B1</option>
-      </select>
-    </div>
-  </div>
-  <p class="section-title">Annual cash outlay after Medisave withdrawal limits</p>
-  <div class="info-box">Cash outlay = amount you must pay in cash after using your Medisave Additional Withdrawal Limit (AWL). Shown at selected ages. "—" means fully covered by Medisave.</div>
-  <div id="cashout-metrics" class="metrics"></div>
-  <div class="legend" id="cashout-legend"></div>
-  <div class="chart-wrap" style="height:320px"><canvas id="cashoutChart"></canvas></div>
-</div>
+
 
 <!-- PANEL 3: POST-65 AFFORDABILITY -->
 <div class="panel" id="panel-retire">
@@ -306,7 +289,6 @@ function showTab(id){
   document.querySelector(`[onclick="showTab('${id}')"]`).classList.add('active');
   document.getElementById('panel-'+id).classList.add('active');
   if(id==='compare')updateCompare();
-  if(id==='cashout')updateCashout();
   if(id==='retire')updateRetire();
   if(id==='data')updateTable();
 }
@@ -324,16 +306,6 @@ function updateCompare(){
   document.getElementById('compare-note').textContent=note[tier];
   destroyChart('compareChart');
   charts.compareChart=new Chart(document.getElementById('compareChart'),{type:'line',data:{labels:ages,datasets},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${fmt(c.parsed.y)}`}}},scales:{x:{title:{display:true,text:'Age next birthday',font:{size:11}},ticks:{maxTicksLimit:20}},y:{title:{display:true,text:'Annual premium (SGD)',font:{size:11}},ticks:{callback:v=>fmt(v)}}}}});
-}
-
-function updateCashout(){
-  const tier=document.getElementById('coTierSel').value;
-  const checkAges=[65,70,75,80,85,90,95,100];
-  const coData={aia:interpolate(AIAcashout[tier]),pru:interpolate(PRUcashout[tier]),ge:interpolate(GEcashout[tier])};
-  document.getElementById('cashout-metrics').innerHTML=[65,75,85].map(a=>{const vals=['aia','pru','ge'].map(ins=>coData[ins][a]||0);const lowest=DATA[['aia','pru','ge'][vals.indexOf(Math.min(...vals))]].name;return`<div class="metric"><div class="metric-label">Age ${a} cash outlay</div>${vals.map((v,i)=>`<div style="font-size:13px;font-weight:500;color:${['aia','pru','ge'].map(k=>DATA[k].color)[i]}">${v>0?fmt(v):'—'}</div>`).join('')}<div class="metric-sub">Lowest: ${lowest}</div></div>`;}).join('');
-  document.getElementById('cashout-legend').innerHTML=['aia','pru','ge'].map(ins=>`<span class="legend-item"><span class="legend-dot" style="background:${DATA[ins].color}"></span>${DATA[ins].name}</span>`).join('');
-  destroyChart('cashoutChart');
-  charts.cashoutChart=new Chart(document.getElementById('cashoutChart'),{type:'bar',data:{labels:checkAges,datasets:['aia','pru','ge'].map(ins=>({label:DATA[ins].name,data:checkAges.map(a=>coData[ins][a]||0),backgroundColor:DATA[ins].color+'BB',borderColor:DATA[ins].color,borderWidth:1,borderRadius:3}))},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${fmt(c.parsed.y)}`}}},scales:{x:{title:{display:true,text:'Age next birthday',font:{size:11}}},y:{title:{display:true,text:'Annual cash outlay (SGD)',font:{size:11}},ticks:{callback:v=>fmt(v)}}}}});
 }
 
 function updateRetire(){
