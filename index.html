@@ -101,26 +101,36 @@ tr:hover td{background:#f1efe8}
 <div class="panel" id="panel-retire">
   <div class="controls">
     <div class="ctl-group">
-      <span class="ctl-label">Insurer</span>
-      <select id="retInsurer" onchange="updateRetire()">
-        <option value="aia">AIA</option>
-        <option value="pru">Prudential</option>
-        <option value="ge">Great Eastern</option>
-      </select>
-    </div>
-    <div class="ctl-group">
-      <span class="ctl-label">Ward tier</span>
-      <select id="retTier" onchange="updateRetire()">
-        <option value="private">Private ward</option>
-        <option value="a">Ward A</option>
-        <option value="b1">Ward B1</option>
-      </select>
-    </div>
-    <div class="ctl-group">
-      <span class="ctl-label">Premium type</span>
-      <select id="retType" onchange="updateRetire()">
-        <option value="base">Base plan only</option>
-        <option value="total">Base + rider</option>
+      <span class="ctl-label">Plan</span>
+      <select id="retPlan" onchange="updateRetire()" style="min-width:320px">
+        <optgroup label="── AIA ──────────────────────">
+          <option value="aia|private|base">AIA · Gold Max A (base only)</option>
+          <option value="aia|private|total">AIA · Gold Max A + VitalHealth A (with rider)</option>
+          <option value="aia|private|avalue_total">AIA · Gold Max A Value + VitalHealth A Value (with rider)</option>
+          <option value="aia|a|base">AIA · Gold Max B (base only)</option>
+          <option value="aia|b1|base">AIA · Gold Max B Lite (base only)</option>
+          <option value="aia|b1|total">AIA · Gold Max B Lite + VitalHealth B (with rider)</option>
+        </optgroup>
+        <optgroup label="── Prudential ───────────────">
+          <option value="pru|private|base">Prudential · PRUShield Premier (base only)</option>
+          <option value="pru|private|total">Prudential · PRUShield Premier + PRUExtra Premier CoPay</option>
+          <option value="pru|private|preferred_total">Prudential · PRUShield Premier + PRUExtra Preferred CoPay</option>
+          <option value="pru|a|base">Prudential · PRUShield A (base only)</option>
+          <option value="pru|a|total">Prudential · PRUShield A + PRUExtra Premier CoPay</option>
+          <option value="pru|b1|base">Prudential · PRUShield B (base only)</option>
+          <option value="pru|b1|total">Prudential · PRUShield B + PRUExtra Plus CoPay</option>
+        </optgroup>
+        <optgroup label="── Great Eastern ────────────">
+          <option value="ge|private|base">Great Eastern · GSH P Plus (base only)</option>
+          <option value="ge|private|total">Great Eastern · GSH P Plus + TotalCare P Signature</option>
+          <option value="ge|private|pprime_total">Great Eastern · GSH P Prime + TotalCare P Prime</option>
+          <option value="ge|a|base">Great Eastern · GSH A Plus (base only)</option>
+          <option value="ge|a|total">Great Eastern · GSH A Plus + TotalCare A</option>
+          <option value="ge|a|basica_total">Great Eastern · GSH A Plus + TotalCare Basic A</option>
+          <option value="ge|b1|base">Great Eastern · GSH B Plus (base only)</option>
+          <option value="ge|b1|total">Great Eastern · GSH B Plus + TotalCare B</option>
+          <option value="ge|b1|basicb_total">Great Eastern · GSH B Plus + TotalCare Basic B</option>
+        </optgroup>
       </select>
     </div>
   </div>
@@ -136,8 +146,8 @@ tr:hover td{background:#f1efe8}
   </div>
   <div class="slider-row">
     <label id="msBalLabel">Medisave balance at start age</label>
-    <input type="range" min="0" max="300000" step="5000" value="150000" id="msBalance" oninput="updateRetire()">
-    <span id="msBalOut">$150,000</span>
+    <input type="range" min="0" max="80000" step="1000" value="50000" id="msBalance" oninput="updateRetire()">
+    <span id="msBalOut">$50,000</span>
   </div>
   <div class="slider-row">
     <label>CPF LIFE monthly payout (from age 65)</label>
@@ -216,8 +226,8 @@ const AIAbase = {
   b1: [[1,69],[21,71],[31,104],[41,165],[46,203],[51,219],[56,242],[61,367],[66,591],[71,876],[74,1029],[76,1395],[81,1445],[84,1494],[86,1660],[89,1930],[91,2110],[94,2297],[96,2598],[99,2814]]
 };
 const AIArider = {
-  private: [[1,1016],[31,1127],[41,1393],[46,1572],[51,2237],[56,2880],[61,3878],[66,5289],[71,6305],[74,7097],[76,7591],[79,8199],[81,8691],[84,9221],[86,9778],[89,10369],[91,10716],[94,11071],[96,11442],[99,11824]],
-  a: [[1,346],[21,315],[31,351],[41,435],[46,546],[51,700],[56,975],[61,1310],[66,1730],[71,2088],[74,2286],[76,2445],[79,2640],[81,2799],[84,2971],[86,3150],[89,3340],[91,3451],[94,3566],[96,3686],[99,3809]],
+  private: [[1,1079],[16,1079],[21,1079],[26,1079],[31,1190],[36,1190],[41,1456],[46,1635],[51,2300],[56,2943],[61,3941],[66,5352],[71,6368],[74,7160],[76,7654],[79,8262],[81,8754],[84,9284],[86,9841],[89,10432],[91,10779],[94,11134],[96,11505],[99,11887]],
+  a: [[1,346],[16,315],[21,315],[26,315],[31,351],[36,351],[41,435],[46,546],[51,700],[56,975],[61,1310],[66,1730],[71,2088],[74,2286],[76,2445],[79,2640],[81,2799],[84,2971],[86,3150],[89,3340],[91,3451],[94,3566],[96,3686],[99,3809]],
   b1: [[1,234],[21,255],[31,282],[41,401],[51,520],[56,753],[61,1088],[66,1796],[71,2348],[74,2387],[76,2441],[81,2835],[84,3084],[86,3268],[89,3333],[91,3581],[94,3830],[96,4198],[99,4447]]
 };
 const AIAcashout = {
@@ -308,10 +318,117 @@ function updateCompare(){
   charts.compareChart=new Chart(document.getElementById('compareChart'),{type:'line',data:{labels:ages,datasets},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${fmt(c.parsed.y)}`}}},scales:{x:{title:{display:true,text:'Age next birthday',font:{size:11}},ticks:{maxTicksLimit:20}},y:{title:{display:true,text:'Annual premium (SGD)',font:{size:11}},ticks:{callback:v=>fmt(v)}}}}});
 }
 
+// AIA VitalHealth A Value WITH booster (column 4 from premium table)
+const AIAriderAValue = {
+  private: [[1,409],[16,378],[21,378],[26,378],[31,415],[36,415],[41,498],[46,609],[51,763],[56,1038],[61,1373],[66,1794],[71,2151],[74,2349],[76,2508],[79,2704],[81,2863],[84,3034],[86,3213],[89,3403],[91,3514],[94,3630],[96,3749],[99,3872]],
+  a: [[1,409],[16,378],[21,378],[26,378],[31,415],[36,415],[41,498],[46,609],[51,763],[56,1038],[61,1373],[66,1794],[71,2151],[74,2349],[76,2508],[79,2704],[81,2863],[84,3034],[86,3213],[89,3403],[91,3514],[94,3630],[96,3749],[99,3872]],
+  b1: [[1,409],[16,378],[21,378],[26,378],[31,415],[36,415],[41,498],[46,609],[51,763],[56,1038],[61,1373],[66,1794],[71,2151],[74,2349],[76,2508],[79,2704],[81,2863],[84,3034],[86,3213],[89,3403],[91,3514],[94,3630],[96,3749],[99,3872]]
+};
+
+// PRU Preferred CoPay rider
+const PRUriderPreferred = {
+  private: [[1,664],[2,660],[3,657],[4,650],[5,635],[6,614],[7,593],[8,573],[9,551],[10,531],[11,506],[12,508],[13,510],[14,511],[15,512],[16,513],[17,515],[18,517],[19,520],[20,522],[21,565],[22,565],[23,568],[24,569],[25,570],[26,571],[27,577],[28,585],[29,593],[30,603],[31,636],[32,646],[33,655],[34,664],[35,671],[36,681],[37,690],[38,699],[39,709],[40,717],[41,945],[42,958],[43,1050],[44,1081],[45,1085],[46,1089],[47,1093],[48,1096],[49,1100],[50,1104],[51,1415],[52,1424],[53,1456],[54,1566],[55,1605],[56,1944],[57,1957],[58,1963],[59,2165],[60,2247],[61,2757],[62,2806],[63,3009],[64,3132],[65,3132],[66,3820],[67,4079],[68,4337],[69,4369],[70,4400],[71,4802],[72,4837],[73,5036],[74,5282],[75,5503],[76,5731],[77,5956],[78,6175],[79,6396],[80,6604],[81,6814],[82,7019],[83,7076],[84,7135],[85,7400],[86,7665],[87,7930],[88,8125],[89,8318],[90,8383],[91,8449],[92,8514],[93,8642],[94,8769],[95,8858],[96,8947],[97,9034],[98,9167],[99,9298],[100,9429]],
+  a: [[1,664],[5,635],[10,531],[20,522],[25,570],[30,603],[35,671],[40,717],[45,1085],[50,1104],[55,1605],[60,2247],[65,3132],[70,4400],[75,5503],[80,6604],[85,7400],[90,8383],[95,8858],[100,9429]],
+  b1: [[1,664],[5,635],[10,531],[20,522],[25,570],[30,603],[35,671],[40,717],[45,1085],[50,1104],[55,1605],[60,2247],[65,3132],[70,4400],[75,5503],[80,6604],[85,7400],[90,8383],[95,8858],[100,9429]]
+};
+
+// PRU Plus CoPay rider (for B1)
+const PRUriderPlus = {
+  b1: [[1,258],[21,264],[31,289],[41,360],[51,507],[56,693],[61,959],[66,1250],[71,1584],[74,1862],[76,2065],[79,2226],[81,2365],[84,2459],[86,2635],[89,2790],[91,2875],[94,2962],[96,3049],[99,3140]],
+  private: [[1,258],[21,264],[31,289],[41,360],[51,507],[56,693],[61,959],[66,1250],[71,1584],[74,1862],[76,2065],[79,2226],[81,2365],[84,2459],[86,2635],[89,2790],[91,2875],[94,2962],[96,3049],[99,3140]],
+  a: [[1,258],[21,264],[31,289],[41,360],[51,507],[56,693],[61,959],[66,1250],[71,1584],[74,1862],[76,2065],[79,2226],[81,2365],[84,2459],[86,2635],[89,2790],[91,2875],[94,2962],[96,3049],[99,3140]]
+};
+
+// GE P Prime base
+const GEbasePPrime = {
+  private: [[1,193],[4,174],[21,219],[26,255],[31,352],[36,379],[41,722],[46,758],[51,1176],[56,1506],[61,2211],[64,2226],[66,3100],[69,3351],[71,3769],[74,4673],[76,5368],[79,6478],[81,6928],[84,7322],[86,7359],[89,7438],[91,7519],[94,7584],[96,7652],[99,7701]]
+};
+// GE TotalCare P Prime rider
+const GEriderPPrime = {
+  private: [[1,504],[4,464],[21,447],[26,469],[31,547],[36,586],[41,879],[46,1034],[51,1622],[56,2133],[61,2783],[64,3002],[66,3762],[69,4152],[71,4665],[74,5482],[76,6204],[79,7187],[81,7809],[84,8365],[86,8611],[89,8960],[91,9209],[94,9417],[96,9560],[99,9680]]
+};
+// GE TotalCare Basic A rider
+const GEriderBasicA = {
+  a: [[1,59],[4,58],[6,57],[8,56],[9,56],[10,55],[11,55],[12,54],[13,54],[14,54],[15,54],[18,55],[19,56],[20,56],[21,57],[23,57],[24,58],[25,58],[26,59],[27,60],[28,63],[29,65],[30,67],[31,70],[32,73],[33,75],[34,78],[35,83],[36,87],[37,90],[38,91],[39,91],[40,92],[41,108],[42,112],[43,117],[44,122],[45,127],[46,133],[47,140],[48,147],[49,154],[50,155],[51,171],[52,179],[53,192],[54,204],[55,218],[56,232],[57,247],[58,264],[59,281],[60,301],[61,321],[62,341],[63,363],[64,386],[65,411],[66,435],[67,460],[68,487],[69,513],[70,540],[71,567],[72,597],[73,627],[74,656],[75,687],[76,714],[77,743],[78,772],[79,802],[80,830],[81,859],[82,890],[83,919],[84,946],[85,973],[86,997],[87,1022],[88,1046],[89,1069],[90,1089],[91,1107],[92,1125],[93,1140],[94,1154],[95,1166],[96,1177],[97,1185],[98,1191],[99,1195],[100,1195]]
+};
+// GE TotalCare Basic B rider
+const GEriderBasicB = {
+  b1: [[1,49],[6,47],[8,47],[9,46],[10,46],[11,46],[12,45],[13,45],[14,45],[15,45],[18,46],[19,46],[20,47],[21,47],[23,49],[24,49],[25,49],[26,49],[27,51],[28,53],[29,54],[30,56],[31,58],[32,60],[33,62],[34,65],[35,68],[36,71],[37,74],[38,74],[39,75],[40,75],[41,89],[42,93],[43,98],[44,101],[45,105],[46,110],[47,115],[48,122],[49,127],[50,128],[51,141],[52,149],[53,158],[54,169],[55,179],[56,192],[57,204],[58,218],[59,232],[60,248],[61,265],[62,282],[63,300],[64,319],[65,338],[66,359],[67,380],[68,401],[69,425],[70,445],[71,469],[72,493],[73,518],[74,542],[75,566],[76,590],[77,613],[78,638],[79,662],[80,686],[81,709],[82,734],[83,758],[84,780],[85,803],[86,823],[87,843],[88,863],[89,882],[90,899],[91,914],[92,928],[93,940],[94,952],[95,963],[96,971],[97,978],[98,983],[99,986],[100,986]]
+};
+
+function getPremiumByPlan(planKey, age) {
+  const [ins, tier, type] = planKey.split('|');
+  if(type === 'base') {
+    return interpolate(DATA[ins].base[tier])[age] || 0;
+  }
+  const base = interpolate(DATA[ins].base[tier])[age] || 0;
+  let rider = 0;
+  if(ins==='aia' && type==='avalue_total') rider = interpolate(AIAriderAValue[tier] || AIAriderAValue.private)[age] || 0;
+  else if(ins==='pru' && type==='preferred_total') rider = interpolate(PRUriderPreferred[tier] || PRUriderPreferred.private)[age] || 0;
+  else if(ins==='pru' && type==='total' && tier==='b1') rider = interpolate(PRUriderPlus.b1)[age] || 0;
+  else if(ins==='ge' && type==='pprime_total') { return (interpolate(GEbasePPrime.private)[age]||0) + (interpolate(GEriderPPrime.private)[age]||0); }
+  else if(ins==='ge' && type==='basica_total') rider = interpolate(GEriderBasicA.a)[age] || 0;
+  else if(ins==='ge' && type==='basicb_total') rider = interpolate(GEriderBasicB.b1)[age] || 0;
+  else rider = interpolate(DATA[ins].rider[tier])[age] || 0;
+  return base + rider;
+}
+
+const PLAN_LABELS = {
+  'aia|private|base':'AIA Gold Max A (base only)',
+  'aia|private|total':'AIA Gold Max A + VitalHealth A',
+  'aia|private|avalue_total':'AIA Gold Max A Value + VitalHealth A Value',
+  'aia|a|base':'AIA Gold Max B (base only)',
+  'aia|b1|base':'AIA Gold Max B Lite (base only)',
+  'aia|b1|total':'AIA Gold Max B Lite + VitalHealth B',
+  'pru|private|base':'Prudential PRUShield Premier (base only)',
+  'pru|private|total':'Prudential PRUShield Premier + PRUExtra Premier CoPay',
+  'pru|private|preferred_total':'Prudential PRUShield Premier + PRUExtra Preferred CoPay',
+  'pru|a|base':'Prudential PRUShield A (base only)',
+  'pru|a|total':'Prudential PRUShield A + PRUExtra Premier CoPay',
+  'pru|b1|base':'Prudential PRUShield B (base only)',
+  'pru|b1|total':'Prudential PRUShield B + PRUExtra Plus CoPay',
+  'ge|private|base':'GE GSH P Plus (base only)',
+  'ge|private|total':'GE GSH P Plus + TotalCare P Signature',
+  'ge|private|pprime_total':'GE GSH P Prime + TotalCare P Prime',
+  'ge|a|base':'GE GSH A Plus (base only)',
+  'ge|a|total':'GE GSH A Plus + TotalCare A',
+  'ge|a|basica_total':'GE GSH A Plus + TotalCare Basic A',
+  'ge|b1|base':'GE GSH B Plus (base only)',
+  'ge|b1|total':'GE GSH B Plus + TotalCare B',
+  'ge|b1|basicb_total':'GE GSH B Plus + TotalCare Basic B'
+};
+
+// MediShield Life premiums by age - fully payable by Medisave
+const MSL = [[1,200],[21,295],[31,503],[41,637],[51,903],[61,1131],[66,1326],[71,1643],[74,1816],[76,2027],[79,2187],[81,2303],[84,2616],[86,2785],[91,2826]];
+
+function getMSL(age){
+  const sorted=[...MSL].sort((a,b)=>a[0]-b[0]);
+  let val=sorted[0][1];
+  for(const[a,v] of sorted){if(age>=a)val=v;else break;}
+  return val;
+}
+
+// Get just the IP additional portion (base minus MediShield Life)
+function getIPAdditional(ins, tier, age){
+  return interpolate(DATA[ins].base[tier])[age]||0;
+}
+
+// Get rider premium (pure cash)
+function getRiderPremium(planKey, age){
+  const [ins,tier,type]=planKey.split('|');
+  if(type==='base') return 0;
+  if(ins==='aia' && type==='avalue_total') return interpolate(AIAriderAValue[tier]||AIAriderAValue.private)[age]||0;
+  if(ins==='pru' && type==='preferred_total') return interpolate(PRUriderPreferred[tier]||PRUriderPreferred.private)[age]||0;
+  if(ins==='pru' && type==='total' && tier==='b1') return interpolate(PRUriderPlus.b1)[age]||0;
+  if(ins==='ge' && type==='pprime_total') return interpolate(GEriderPPrime.private)[age]||0;
+  if(ins==='ge' && type==='basica_total') return interpolate(GEriderBasicA.a)[age]||0;
+  if(ins==='ge' && type==='basicb_total') return interpolate(GEriderBasicB.b1)[age]||0;
+  return interpolate(DATA[ins].rider[tier])[age]||0;
+}
+
 function updateRetire(){
-  const insurer=document.getElementById('retInsurer').value;
-  const tier=document.getElementById('retTier').value;
-  const type=document.getElementById('retType').value;
+  const planKey=document.getElementById('retPlan').value;
+  const [ins,tier,type]=planKey.split('|');
   const msBalance=parseInt(document.getElementById('msBalance').value);
   const cpfMonthly=parseInt(document.getElementById('cpfLife').value);
   let startAge=parseInt(document.getElementById('retStartAge').value);
@@ -324,22 +441,75 @@ function updateRetire(){
   document.getElementById('msBalLabel').textContent=`Medisave balance at age ${startAge}`;
   const ages=Array.from({length:endAge-startAge+1},(_,i)=>i+startAge);
   const cpfAnnual=cpfMonthly*12;
-  const premiums=ages.map(a=>getPremium(insurer,tier,type,a));
-  const cashNeeded=ages.map((a,i)=>{const p=premiums[i];const mu=Math.min(p,getAWL(a));return Math.max(0,p-mu);});
+
+  // For each age, split into 3 layers:
+  // 1. MediShield Life → always fully Medisave
+  // 2. IP additional → Medisave up to AWL, rest is cash
+  // 3. Rider → always 100% cash
+
   let msBal=msBalance;
-  const awlCover=[],cpfCover=[],shortfall=[];
-  ages.forEach((a,i)=>{const p=premiums[i];const awlAmt=Math.min(p,getAWL(a));const cashN=cashNeeded[i];msBal=Math.max(0,msBal-awlAmt);const cpfC=a>=65?Math.min(cpfAnnual,cashN):0;const gap=Math.max(0,cashN-cpfC);awlCover.push(awlAmt);cpfCover.push(cpfC);shortfall.push(gap);});
+  const mslLayer=[],ipMedisaveLayer=[],cashLayer=[],cpfCover=[],shortfall=[];
+
+  ages.forEach((a,i)=>{
+    const msl=getMSL(a);
+    const ipAdd=getIPAdditional(ins,tier,a);
+    const rider=getRiderPremium(planKey,a);
+    const awl=getAWL(a);
+
+    // MediShield Life: fully from Medisave
+    msBal=Math.max(0,msBal-msl);
+
+    // IP additional: up to AWL from Medisave, rest is cash
+    const ipFromMedisave=Math.min(ipAdd,awl);
+    const ipCash=Math.max(0,ipAdd-awl);
+    msBal=Math.max(0,msBal-ipFromMedisave);
+
+    // Total cash needed = IP cash outlay + full rider
+    const totalCash=ipCash+rider;
+
+    // CPF LIFE offsets cash from age 65
+    const cpfC=a>=65?Math.min(cpfAnnual,totalCash):0;
+    const gap=Math.max(0,totalCash-cpfC);
+
+    mslLayer.push(msl+ipFromMedisave);  // total Medisave-funded (MSL + IP within AWL)
+    ipMedisaveLayer.push(0);            // placeholder (combined above)
+    cashLayer.push(totalCash);
+    cpfCover.push(cpfC);
+    shortfall.push(gap);
+  });
+
   const totalShortfall=shortfall.reduce((a,b)=>a+b,0);
   const firstSAIdx=shortfall.findIndex(s=>s>0);
   const firstSA=firstSAIdx>=0?ages[firstSAIdx]:null;
   const midAge=ages[Math.floor(ages.length/2)]||startAge;
-  document.getElementById('retire-metrics').innerHTML=`<div class="metric"><div class="metric-label">Premium at ${startAge}</div><div class="metric-value">${fmt(getPremium(insurer,tier,type,startAge))}</div><div class="metric-sub">per year</div></div><div class="metric"><div class="metric-label">Premium at ${midAge}</div><div class="metric-value">${fmt(getPremium(insurer,tier,type,midAge))}</div><div class="metric-sub">per year</div></div><div class="metric"><div class="metric-label">Premium at ${endAge}</div><div class="metric-value">${fmt(getPremium(insurer,tier,type,endAge))}</div><div class="metric-sub">per year</div></div><div class="metric"><div class="metric-label">Total cash shortfall</div><div class="metric-value" style="color:#A32D2D">${fmt(totalShortfall)}</div><div class="metric-sub">ages ${startAge}–${endAge} after CPF LIFE</div></div>`;
-  document.getElementById('retire-legend').innerHTML=`<span class="legend-item"><span class="legend-dot" style="background:#3B6D11"></span>Covered by Medisave AWL</span><span class="legend-item"><span class="legend-dot" style="background:#BA7517"></span>Covered by CPF LIFE</span><span class="legend-item"><span class="legend-dot" style="background:#A32D2D"></span>Remaining cash shortfall</span>`;
+
+  document.getElementById('retire-metrics').innerHTML=`
+    <div class="metric"><div class="metric-label">Total premium at ${startAge}</div><div class="metric-value">${fmt(getPremiumByPlan(planKey,startAge)+getMSL(startAge))}</div><div class="metric-sub">incl. MediShield Life</div></div>
+    <div class="metric"><div class="metric-label">Total premium at ${midAge}</div><div class="metric-value">${fmt(getPremiumByPlan(planKey,midAge)+getMSL(midAge))}</div><div class="metric-sub">incl. MediShield Life</div></div>
+    <div class="metric"><div class="metric-label">Total premium at ${endAge}</div><div class="metric-value">${fmt(getPremiumByPlan(planKey,endAge)+getMSL(endAge))}</div><div class="metric-sub">incl. MediShield Life</div></div>
+    <div class="metric"><div class="metric-label">Total cash shortfall</div><div class="metric-value" style="color:#A32D2D">${fmt(totalShortfall)}</div><div class="metric-sub">ages ${startAge}–${endAge} after CPF LIFE</div></div>
+  `;
+
+  document.getElementById('retire-legend').innerHTML=`
+    <span class="legend-item"><span class="legend-dot" style="background:#3B6D11"></span>Base covered by Medisave (MSL + IP within AWL)</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#BA7517"></span>Covered by CPF LIFE (from age 65)</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#A32D2D"></span>Cash shortfall (IP above AWL + rider)</span>
+  `;
+
   destroyChart('retireChart');
   const maxTicks=ages.length>40?15:ages.length>20?10:ages.length;
-  charts.retireChart=new Chart(document.getElementById('retireChart'),{type:'bar',data:{labels:ages,datasets:[{label:'Medisave AWL',data:awlCover,backgroundColor:'#3B6D11BB',stack:'s'},{label:'CPF LIFE cover',data:cpfCover,backgroundColor:'#BA7517BB',stack:'s'},{label:'Cash shortfall',data:shortfall,backgroundColor:'#A32D2DBB',stack:'s'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${fmt(c.parsed.y)}`}}},scales:{x:{title:{display:true,text:'Age next birthday',font:{size:11}},stacked:true,ticks:{maxTicksLimit:maxTicks}},y:{title:{display:true,text:'Annual premium breakdown (SGD)',font:{size:11}},stacked:true,ticks:{callback:v=>fmt(v)}}}}});
-  const planName=DATA[insurer].planNames[tier];
-  document.getElementById('retire-note').innerHTML=`<strong>Plan:</strong> ${planName} &nbsp;|&nbsp; <strong>Age range:</strong> ${startAge}–${endAge}<br>The red portion shows annual cash needed beyond Medisave + CPF LIFE. ${totalShortfall>0?`Total estimated shortfall: <strong>${fmt(totalShortfall)}</strong>. ${firstSA?`Shortfall begins at age ${firstSA}.`:''} Consider building a dedicated sinking fund or stepping down ward class.`:'Premiums appear fully manageable within Medisave + CPF LIFE for this range.'}`;
+  charts.retireChart=new Chart(document.getElementById('retireChart'),{
+    type:'bar',
+    data:{labels:ages,datasets:[
+      {label:'Medisave (MSL + IP within AWL)',data:mslLayer,backgroundColor:'#3B6D11BB',stack:'s'},
+      {label:'CPF LIFE cover',data:cpfCover,backgroundColor:'#BA7517BB',stack:'s'},
+      {label:'Cash shortfall',data:shortfall,backgroundColor:'#A32D2DBB',stack:'s'}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${fmt(c.parsed.y)}`}}},scales:{x:{title:{display:true,text:'Age next birthday',font:{size:11}},stacked:true,ticks:{maxTicksLimit:maxTicks}},y:{title:{display:true,text:'Annual premium breakdown (SGD)',font:{size:11}},stacked:true,ticks:{callback:v=>fmt(v)}}}}
+  });
+
+  const planName=PLAN_LABELS[planKey]||planKey;
+  document.getElementById('retire-note').innerHTML=`<strong>Plan:</strong> ${planName} &nbsp;|&nbsp; <strong>Age range:</strong> ${startAge}–${endAge}<br>MediShield Life and IP additional coverage within the AWL are fully funded by Medisave. The red portion (IP above AWL + full rider premium) must be paid in cash. ${totalShortfall>0?`Total estimated cash shortfall: <strong>${fmt(totalShortfall)}</strong>. ${firstSA?`Cash outlay begins at age ${firstSA}.`:''} Consider a sinking fund or stepping down ward class at retirement.`:'Premiums appear fully manageable within Medisave + CPF LIFE for this range.'}`;
 }
 
 function updateTable(){
@@ -355,6 +525,7 @@ function updateTable(){
 }
 
 updateCompare();
+updateRetire();
 </script>
 <div style="margin-top:3rem;border-top:1px solid #e0dfd7;padding-top:1.5rem;">
   <div style="background:#f1efe8;border-left:3px solid #888780;border-radius:0 8px 8px 0;padding:14px 16px;margin-bottom:1.5rem;font-size:12px;color:#5f5e5a;line-height:1.8">
