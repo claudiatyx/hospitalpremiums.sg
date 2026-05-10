@@ -105,11 +105,14 @@ tr:hover td{background:#f1efe8}
       <select id="retPlan" onchange="updateRetire()" style="min-width:320px">
         <optgroup label="── AIA ──────────────────────">
           <option value="aia|private|base">AIA · Gold Max A (base only)</option>
-          <option value="aia|private|total">AIA · Gold Max A + VitalHealth A (with rider)</option>
-          <option value="aia|private|avalue_total">AIA · Gold Max A Value + VitalHealth A Value (with rider)</option>
+          <option value="aia|private|total">AIA · Gold Max A + VitalHealth A with booster</option>
+          <option value="aia|private|avalue_total">AIA · Gold Max A Value + VitalHealth A Value with booster</option>
+          <option value="aia|private|proa_total">AIA · Gold Max A + VitalHealth Pro A</option>
           <option value="aia|a|base">AIA · Gold Max B (base only)</option>
+          <option value="aia|a|prob_total">AIA · Gold Max B + VitalHealth Pro B</option>
           <option value="aia|b1|base">AIA · Gold Max B Lite (base only)</option>
-          <option value="aia|b1|total">AIA · Gold Max B Lite + VitalHealth B (with rider)</option>
+          <option value="aia|b1|total">AIA · Gold Max B Lite + VitalHealth B</option>
+          <option value="aia|b1|problite_total">AIA · Gold Max B Lite + VitalHealth Pro B Lite</option>
         </optgroup>
         <optgroup label="── Prudential ───────────────">
           <option value="pru|private|base">Prudential · PRUShield Premier (base only)</option>
@@ -318,6 +321,19 @@ function updateCompare(){
   charts.compareChart=new Chart(document.getElementById('compareChart'),{type:'line',data:{labels:ages,datasets},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${fmt(c.parsed.y)}`}}},scales:{x:{title:{display:true,text:'Age next birthday',font:{size:11}},ticks:{maxTicksLimit:20}},y:{title:{display:true,text:'Annual premium (SGD)',font:{size:11}},ticks:{callback:v=>fmt(v)}}}}});
 }
 
+// AIA VitalHealth Pro A (new rider, attaches to Gold Max A)
+const AIAriderProA = {
+  private: [[1,711],[16,711],[21,711],[26,711],[31,788],[36,788],[41,975],[46,1100],[51,1565],[56,2016],[61,2714],[66,3702],[71,4413],[74,4967],[76,5313],[79,5739],[81,6083],[84,6454],[86,6844],[89,7258],[91,7501],[94,7749],[96,8009],[99,8276]]
+};
+// AIA VitalHealth Pro B (attaches to Gold Max B / Ward A)
+const AIAriderProB = {
+  a: [[1,163],[21,178],[26,178],[31,197],[36,197],[41,280],[46,280],[51,364],[56,527],[61,761],[66,1257],[71,1643],[74,1670],[76,1708],[79,1708],[81,1984],[84,2158],[86,2287],[89,2333],[91,2506],[94,2681],[96,2938],[99,3112]]
+};
+// AIA VitalHealth Pro B Lite (attaches to Gold Max B Lite / Ward B1)
+const AIAriderProBLite = {
+  b1: [[1,90],[21,103],[26,103],[31,128],[36,128],[41,190],[46,190],[51,205],[56,282],[61,481],[66,722],[71,770],[74,770],[76,802],[79,802],[81,841],[84,1027],[86,1027],[89,1123],[91,1178],[94,1219],[96,1348],[99,1476]]
+};
+
 // AIA VitalHealth A Value WITH booster (column 4 from premium table)
 const AIAriderAValue = {
   private: [[1,409],[16,378],[21,378],[26,378],[31,415],[36,415],[41,498],[46,609],[51,763],[56,1038],[61,1373],[66,1794],[71,2151],[74,2349],[76,2508],[79,2704],[81,2863],[84,3034],[86,3213],[89,3403],[91,3514],[94,3630],[96,3749],[99,3872]],
@@ -375,11 +391,14 @@ function getPremiumByPlan(planKey, age) {
 
 const PLAN_LABELS = {
   'aia|private|base':'AIA Gold Max A (base only)',
-  'aia|private|total':'AIA Gold Max A + VitalHealth A',
-  'aia|private|avalue_total':'AIA Gold Max A Value + VitalHealth A Value',
+  'aia|private|total':'AIA Gold Max A + VitalHealth A with booster',
+  'aia|private|avalue_total':'AIA Gold Max A Value + VitalHealth A Value with booster',
+  'aia|private|proa_total':'AIA Gold Max A + VitalHealth Pro A',
   'aia|a|base':'AIA Gold Max B (base only)',
+  'aia|a|prob_total':'AIA Gold Max B + VitalHealth Pro B',
   'aia|b1|base':'AIA Gold Max B Lite (base only)',
   'aia|b1|total':'AIA Gold Max B Lite + VitalHealth B',
+  'aia|b1|problite_total':'AIA Gold Max B Lite + VitalHealth Pro B Lite',
   'pru|private|base':'Prudential PRUShield Premier (base only)',
   'pru|private|total':'Prudential PRUShield Premier + PRUExtra Premier CoPay',
   'pru|private|preferred_total':'Prudential PRUShield Premier + PRUExtra Preferred CoPay',
@@ -418,6 +437,9 @@ function getRiderPremium(planKey, age){
   const [ins,tier,type]=planKey.split('|');
   if(type==='base') return 0;
   if(ins==='aia' && type==='avalue_total') return interpolate(AIAriderAValue[tier]||AIAriderAValue.private)[age]||0;
+  if(ins==='aia' && type==='proa_total') return interpolate(AIAriderProA.private)[age]||0;
+  if(ins==='aia' && type==='prob_total') return interpolate(AIAriderProB.a)[age]||0;
+  if(ins==='aia' && type==='problite_total') return interpolate(AIAriderProBLite.b1)[age]||0;
   if(ins==='pru' && type==='preferred_total') return interpolate(PRUriderPreferred[tier]||PRUriderPreferred.private)[age]||0;
   if(ins==='pru' && type==='total' && tier==='b1') return interpolate(PRUriderPlus.b1)[age]||0;
   if(ins==='ge' && type==='pprime_total') return interpolate(GEriderPPrime.private)[age]||0;
